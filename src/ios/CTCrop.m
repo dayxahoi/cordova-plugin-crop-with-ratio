@@ -29,7 +29,7 @@
     if ([imagePath hasPrefix:filePrefix]) {
         imagePath = [imagePath substringFromIndex:[filePrefix length]];
     }
-     
+    
     if (!(image = [UIImage imageWithContentsOfFile:imagePath])) {
         NSDictionary *err = @{
                               @"message": @"Image doesn't exist",
@@ -44,32 +44,35 @@
     cropController.delegate = self;
     cropController.image = image;
     
-    CGFloat width = self.targetWidth > -1 ? (CGFloat)self.targetWidth : image.size.width;
-    CGFloat height = self.targetHeight > -1 ? (CGFloat)self.targetHeight : image.size.height;
+    CGFloat width = (NSInteger)self.targetWidth > (NSInteger)-1 ? (CGFloat)self.targetWidth : image.size.width;
+    CGFloat height = (NSInteger)self.targetHeight > (NSInteger)-1 ? (CGFloat)self.targetHeight : image.size.height;
     CGFloat croperWidth;
     CGFloat croperHeight;
     
-     if (self.widthRatio < 0 || self.heightRatio < 0){
-         cropController.keepingCropAspectRatio = NO;
-         croperWidth = MIN(width, height);
-         croperHeight = MIN(width, height); 
+    if (self.widthRatio < 0 || self.heightRatio < 0){
+        cropController.keepingCropAspectRatio = NO;
+        croperWidth = MIN(width, height);
+        croperHeight = MIN(width, height);
     } else {
-         cropController.keepingCropAspectRatio = YES;
-         if(self.widthRatio > self.heightRatio) {
-             croperWidth = width;
-             croperHeight = width * self.heightRatio / self.widthRatio;
-         } else {
-             croperWidth = height * self.widthRatio / self.heightRatio;
-             croperHeight = height;
-         }
-     }
-     
+        cropController.keepingCropAspectRatio = YES;
+        if(self.widthRatio > self.heightRatio) {
+            croperWidth = width;
+            croperHeight = width * self.heightRatio / self.widthRatio;
+        }else if (self.widthRatio == self.heightRatio) {
+            croperWidth = MIN(width, height);
+            croperHeight = MIN(width, height);
+        } else {
+            croperWidth = height * self.widthRatio / self.heightRatio;
+            croperHeight = height;
+        }
+    }
+    
     cropController.toolbarHidden = YES;
-     cropController.rotationEnabled = NO;
-     cropController.imageCropRect = CGRectMake((width - croperWidth) / 2,
-                                               (height - croperHeight) / 2,
-                                               croperWidth,
-                                               croperHeight);
+    cropController.rotationEnabled = NO;
+    cropController.imageCropRect = CGRectMake((width - croperWidth) / 2,
+                                              (height - croperHeight) / 2,
+                                              croperWidth,
+                                              croperHeight);
     
     self.callbackId = command.callbackId;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cropController];
