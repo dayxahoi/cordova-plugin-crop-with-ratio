@@ -1,4 +1,4 @@
-# cordova-plugin-crop-with-ratio
+# cordova-plugin-simple-crop
 
 > Crop an image in a Cordova app
 
@@ -6,7 +6,7 @@
 ## Install
 
 ```
-$ cordova plugin add --save https://github.com/htqbuu/cordova-plugin-ratio-crop
+$ cordova plugin add --save https://github.com/htqbuu/cordova-plugin-simple-crop
 ```
 
 
